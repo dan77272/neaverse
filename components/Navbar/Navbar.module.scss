@@ -1,0 +1,211 @@
+.userSuggestion {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    &:hover {
+        background-color: #f0f0f0;
+    }
+    a {
+        text-decoration: none;
+        color: #333;
+    }
+}
+
+.profilePicture {
+    margin-right: 10px;
+    img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid black;
+        object-fit: cover;
+    }
+}
+
+.userName {
+    flex: 1;
+}
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 30px;
+    font-size: 20px;
+    
+    .logo {
+        font-size: 30px;
+        .home {
+            text-decoration: none;
+            color: black;
+        }
+    }
+
+    .mid {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        .input {
+            width: 50%; 
+            height: 30px;
+            border-radius: 7px;
+            outline: none;
+            border: 1px solid black;
+            font-size: 20px;
+            transform: translateX(15%);
+
+            @media (max-width: 768px) {
+                transform: translateX(0%);
+                width: 200px;
+            }
+        }
+
+        .suggestionList {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 49%;
+            min-width: 200px;
+            z-index: 2;
+            transform: translateX(68%);
+            .suggestionItem {
+                padding: 10px;
+                background-color: #fff;
+                border-bottom: 1px solid #e0e0e0;
+                transition: background-color 0.2s ease;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #f0f0f0;
+                }
+                
+                a {
+                    text-decoration: none;
+                    color: #333;
+                }
+            }
+
+            @media (max-width: 768px) {
+                transform: translateX(0%);
+                width: 200px;
+            }
+        }
+    }
+
+    .right {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        .toggleCheckbox {
+            display: none; // Hide the checkbox
+        
+            &:checked + .toggleLabel::before {
+                transform: translateX(26px); // Adjust this value as necessary for the right position
+            }
+        }
+
+        .toggleLabel {
+            width: 60px;
+            height: 30px;
+            background-color: #ccc;
+            position: relative;
+            border-radius: 34px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        
+            &::before {
+                content: '';
+                position: absolute;
+                left: 4px;
+                top: 4px;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background-color: white;
+                transition: all 0.3s;
+            }
+        
+            &:hover {
+                background-color: #ddd;
+            }
+        }
+
+        .toggleCheckbox:checked + .toggleLabel {
+            background-color: #4CAF50;
+        }
+        
+        .link {
+            font-size: 20px;
+            text-decoration: none;
+            color: black;
+        }
+
+        button {
+            border: none;
+            outline: none;
+            background-color: rgb(236, 235, 235);
+            cursor: pointer;
+            padding: 10px;
+            font-size: 20px;
+        }
+    }
+
+    .hamburger {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 10px;
+        
+        .logo {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        .mid {
+            margin-left: 0;
+
+            .input{
+                margin-left: 0px;
+            }
+        }
+
+        .right {
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            display: none;
+
+            &.open {
+                display: flex;
+            }
+        }
+
+        .hamburger {
+            display: block;
+        }
+    }
+}

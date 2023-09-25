@@ -1,0 +1,182 @@
+.home{
+
+    .loading{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .input{
+        form{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            background-color: white;
+            width: 750px;
+            margin: auto;
+            height: 100px;
+            margin-top: 100px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.3);
+            padding: 10px;
+
+            @media (max-width: 768px) { // for tablets and below
+                width: 400px; // use a percentage to make it flexible
+                flex-direction: column;
+            }
+        }
+
+
+        img{
+            border-radius: 50%;
+            border: 1px solid black;
+        }
+
+        input{
+            width: 550px;
+            height: 30px;
+            border-radius: 10px;
+            outline: none;
+            border: none;
+            font-size: 20px;
+            background-color: rgb(233, 233, 233);
+
+            @media (max-width: 768px) {
+                width: 400px;
+            }
+        }
+        .buttons{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            @media (max-width: 768px) {
+                padding: 25px 20px;
+                margin-top: -35px; // Increase button padding on mobile for easier touch
+              }
+            .postButton{
+                background-color: rgb(106, 163, 228);
+                border-radius: 5px;
+                padding: 5px 10px;
+                font-size: 15px;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+            .fileInputButton {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: green;
+                color: #fff;
+                cursor: pointer;
+                border-radius: 5px;
+                border: none;
+                font-size: 16px;
+              }
+              
+              /* Hide the default file input element */
+              .postPhoto {
+                display: none;
+              }
+        }
+
+    }
+
+    .posts{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-top: 20px;
+
+        .post{
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: white;
+            width: 710px;
+            padding: 20px;
+            height: auto;
+            margin-top: 100px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.3);
+            font-size: 25px;
+
+            @media (max-width: 768px) {
+                width: 400px;
+            }
+
+            .user{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                img{
+                    border-radius: 50%;
+                    border: 1px solid black;
+                    min-height: 40px;
+                }
+                p{
+                    padding: 0;
+                    margin: 0;
+                    font-size: 20px;
+                    font-weight: 500;
+
+                    @media (max-width: 768px) {
+                        font-size: 18px; // Slightly increase font size on mobile for readability
+                      }
+                }
+            }
+
+        hr{
+            color: black;
+            width: 3px;
+            width: 710px;
+
+            @media (max-width: 768px) {
+                width: 400px;
+            }
+        }
+
+        .buttons{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -20px 50px -20px;
+
+            button{
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                border: none;
+                outline: none;
+                background-color: transparent;
+                cursor: pointer;
+                font-size: 20px;
+            }
+        }
+
+        .commentInput{
+            background-color: rgb(233, 233, 233);
+            outline: none;
+            border: none;
+            height: 30px;
+            border-radius: 5px;
+            font-size: 15px;
+            width: 555px;
+            margin-left: 35px;
+            margin-bottom: 10px;
+        }
+        .inputButton{
+            background-color: rgb(106, 163, 228);
+            border: none;
+            border-radius: 3px;
+            color: white;
+            padding: 8px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        }
+    }
+}
