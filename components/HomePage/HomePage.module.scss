@@ -22,7 +22,7 @@
             padding: 10px;
 
             @media (max-width: 768px) { // for tablets and below
-                width: 400px; // use a percentage to make it flexible
+                max-width: 300px; // use a percentage to make it flexible
                 flex-direction: column;
             }
         }
@@ -43,7 +43,7 @@
             background-color: rgb(233, 233, 233);
 
             @media (max-width: 768px) {
-                width: 400px;
+                max-width: 300px;
             }
         }
         .buttons{
@@ -105,7 +105,7 @@
             font-size: 25px;
 
             @media (max-width: 768px) {
-                width: 400px;
+                max-width: 300px;
             }
 
             .user{
@@ -135,7 +135,7 @@
             width: 710px;
 
             @media (max-width: 768px) {
-                width: 400px;
+                max-width: 300px;
             }
         }
 
