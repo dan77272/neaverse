@@ -70,6 +70,7 @@ export default async function handle(req, res) {
         selectedPost.comments.push(newComment);
         // Save the updated post with the new comment
         const updatedPost = await selectedPost.save();
+        console.log('Updated post with new comment:', updatedPost)
         // Respond with the updated post data
         res.status(200).json(updatedPost);
       } catch (error) {

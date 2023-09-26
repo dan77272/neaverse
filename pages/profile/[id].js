@@ -19,9 +19,11 @@ export default function Profile(){
     const [comment, setComment] = useState([])
     const [allPosts, setAllPosts] = useState([])
     const [cmnt, setCmnt] = useState('')
-    const {id} = useContext(UserContext)
+    const {id, firstName: fName, lastName: lName, profilePic: pPic} = useContext(UserContext)
     const {isToggled, toggle} = useToggle()
     const {id: userId} = router.query
+
+
     useEffect(() => {
         
         if (userId) {
@@ -127,26 +129,20 @@ export default function Profile(){
           userId: id,
           type: 'comment',
           comment: cmnt,
-          firstName: firstName,
-          lastName: lastName,
-          profilePic: profilePic // Pass the comment content to the server
+          firstName: fName,
+          lastName: lName,
+          profilePic: pPic || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' // Pass the comment content to the server
         };
-      
+
         try {
           // Send the comment data to the server to post the comment
-          const response = await axios.put('/api/posts?id=' + postId, data);
-          console.log(response.data);
-          const updatedPost = response.data;
-      
+          await axios.put('/api/posts?id=' + postId, data);
+          const response = await axios.get(`/api/posts`);
           // Update the comments information for the specific post in the 'allPosts' state
-          setAllPosts((prevPosts) => {
-            const updatedPosts = [...prevPosts];
-            updatedPosts[index] = updatedPost;
-            return updatedPosts;
-          });
-      
+          setAllPosts(response.data.filter((post) => post.creator._id === userId));
           // Clear the comment input field after posting
           setCmnt('');
+          console.log(allPosts)
         } catch (error) {
           console.error(error);
         }
@@ -228,8 +224,8 @@ export default function Profile(){
                             <input className={styles.commentInput} value={cmnt} onChange={e => setCmnt(e.target.value)} placeholder='Write a comment...'/>
                             <button className={styles.inputButton} type='submit'>Post Comment</button>
                         </div>
-                        {post.comments.map((p) => (
-                            <div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
+                        {post.comments.map((p, index) => (
+                            <div key={index} style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
                                 <div>
                                 <img style={{ borderRadius: '50%', border: '1px solid black' }} height='30' width='30' src={p.profilePic} />
                                 </div>

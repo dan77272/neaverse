@@ -131,16 +131,11 @@ export default function HomePage(){
       
         try {
           // Send the comment data to the server to post the comment
-          const response = await axios.put('/api/posts?id=' + postId, data);
-          console.log(response.data);
-          const updatedPost = response.data;
-      
+          await axios.put('/api/posts?id=' + postId, data);
+
+          const response = await axios.get(`/api/posts?userId=${id}`);
           // Update the comments information for the specific post in the 'allPosts' state
-          setAllPosts((prevPosts) => {
-            const updatedPosts = [...prevPosts];
-            updatedPosts[index] = updatedPost;
-            return updatedPosts;
-          });
+          setAllPosts(response.data);
       
           // Clear the comment input field after posting
           setCmnt('');
