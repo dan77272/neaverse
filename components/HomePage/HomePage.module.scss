@@ -167,6 +167,10 @@
             width: 555px;
             margin-left: 35px;
             margin-bottom: 10px;
+
+            @media (max-width: 768px) {
+                max-width: 280px;
+            }
         }
         .inputButton{
             background-color: rgb(106, 163, 228);
