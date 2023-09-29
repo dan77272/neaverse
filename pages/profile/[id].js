@@ -334,21 +334,21 @@ const toggleMenu = (postId) => {
                     </div>
                     <hr style={{color: 'black'}}/>
                     {comment[index] ?
-                    <form onSubmit={(e) => handleCommentInput(e, post._id, 'comment')}>
+                    <form className={styles.form} onSubmit={(e) => handleCommentInput(e, post._id, 'comment')}>
                         <div className={styles.comment}>
                             <input className={styles.commentInput} value={cmnt} onChange={e => setCmnt(e.target.value)} placeholder='Write a comment...'/>
                             <button className={styles.inputButton} type='submit'>Post Comment</button>
                         </div>
                         {post.comments.map((p, index) => (
-                            <div key={index} style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
-                                <div>
-                                <img style={{ borderRadius: '50%', border: '1px solid black' }} height='30' width='30' src={p.profilePic} />
+                            <div className={styles.commentII} key={index} style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
+                                <div className={styles.commentImg}>
+                                    <img style={{ borderRadius: '50%', border: '1px solid black' }} height='30' width='30' src={p.profilePic} />
                                 </div>
-                                <div style={{ marginLeft: '3px', backgroundColor: 'lightGray', borderRadius: '5px', flex: '1', padding: '5px' }}>
-                                <p style={{ fontSize: '15px', margin: 0, fontWeight: 'bold' }}>
-                                    {p.firstName} {p.lastName}
-                                </p>
-                                <p style={{ margin: 0, fontSize: '20px', fontWeight: 'lighter' }}>{p.content}</p>
+                                <div className={styles.commentSub} style={{ marginLeft: '3px', backgroundColor: 'lightGray', borderRadius: '5px', flex: '1', padding: '5px' }}>
+                                    <p style={{ fontSize: '15px', margin: 0, fontWeight: 'bold' }}>
+                                        {p.firstName} {p.lastName}
+                                    </p>
+                                    <p className={styles.commentContent} style={{ margin: 0, fontWeight: 'lighter' }}>{p.content}</p>
                                 </div>
                             </div>
                             ))}
