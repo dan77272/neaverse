@@ -364,7 +364,7 @@ const toggleMenu = (postId) => {
                                     <img style={{ borderRadius: '50%', border: '1px solid black' }} height='30' width='30' src={p.profilePic} />
                                 </div>
                                 <div className={styles.commentSub} style={{ marginLeft: '3px', backgroundColor: 'lightGray', borderRadius: '5px', flex: '1', padding: '5px' }}>
-                                    <p style={{ fontSize: '15px', margin: 0, fontWeight: 'bold' }}>
+                                    <p style={{ fontSize: '13px', margin: 0, fontWeight: 'bold' }}>
                                         {p.firstName} {p.lastName}
                                     </p>
                                     <p className={styles.commentContent} style={{ margin: 0, fontWeight: 'lighter' }}>{p.content}</p>
