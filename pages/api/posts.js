@@ -80,6 +80,16 @@ export default async function handle(req, res) {
       // Handle other HTTP methods if needed
       res.status(405).json({ error: "Method not allowed." });
     }
+    }else if(req.method === 'DELETE'){
+      const { id } = req.query;
+    
+      try {
+        await Post.findByIdAndDelete(id);
+        res.status(200).json({ message: "Post successfully deleted." });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred while deleting the post." });
+      }
     }
 
 }

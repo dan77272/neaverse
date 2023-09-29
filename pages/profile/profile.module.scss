@@ -123,22 +123,108 @@
           width: 350px;
       }
 
-        .user{
-            display: flex;
-            align-items: center;
+      .user{
+        display: flex;
+        justify-content: space-between;
+
+        .userInfo{
+          display: flex;
+          gap: 15px;
+          align-items: flex-start;
+          margin-bottom: 10px;
+          .image{
             gap: 10px;
             img{
                 border-radius: 50%;
                 border: 1px solid black;
                 min-height: 40px;
             }
-            p{
-                padding: 0;
-                margin: 0;
-                font-size: 20px;
-                font-weight: 500;
-            }
+
+          }
+
+          .userInfoSub{
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              gap: 7px;
+
+              .username{
+                  text-decoration: none;
+                  font-size: 20px;
+                  color: black;
+              }
+
+              p{
+                  padding: 0;
+                  margin: 0;
+                  font-size: 19px;
+                  font-weight: 500;
+  
+                  @media (max-width: 768px) {
+                      font-size: 18px; // Slightly increase font size on mobile for readability
+                    }
+              }
+
+              .date{
+                  color: gray;
+                  font-size: 12px;
+                  margin-top: -5px;
+                }
+
+          }
+
+
+
         }
+
+        .options{
+            position: relative;
+            svg{
+                cursor: pointer;
+            }
+
+            ul{
+                list-style-type: none;
+                position: absolute;
+                bottom: -85px;
+                right: 0;
+                background-color: white;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                width: 150px;
+                display: flex;
+                flex-direction: column;
+                padding: 0;
+                li{
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    height: 40px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    cursor: pointer;
+                    
+                    p{
+                        font-size: 15px;
+                        padding: 8px 12px;
+                        cursor: pointer;
+                    }
+
+                    p{
+                        padding-left: 10px;  // Moved the padding to the inner content
+                    }
+                }
+
+                
+                li:hover {
+                    background-color: #f5f5f5;
+                }
+            }
+
+        }
+
+    }
 
     hr{
         color: black;

@@ -107,7 +107,8 @@
                         <input type='checkbox' checked={isToggled} onChange={toggle} className={styles.toggleCheckbox} id='toggle'/>
                         <label htmlFor="toggle" className={styles.toggleLabel}></label>
                         <Link className={styles.link} href={'/profile/'+id} style={isToggled ? {color: 'white'}: {}}>Profile</Link>
-                        <button onClick={signOut} style={isToggled ? {color: 'white', backgroundColor: '#28282B'}: {}}>Sign Out</button>
+                        <Link className={styles.link} href={'/settings'} style={isToggled ? {color: 'white'}: {}}>Settings</Link>
+                        <button onClick={signOut} style={isToggled ? {color: 'white', backgroundColor: '#28282B', padding: '0', marginTop: '1px'}: {padding: '0', marginTop: '1 px'}}>Sign Out</button>
 
                 </div>
             </div>

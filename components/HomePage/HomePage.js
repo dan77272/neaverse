@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState, createRef  } from 'react'
 import styles from './HomePage.module.scss'
 import axios from 'axios'
 import { UserContext } from '@/UserContext'
 import { useRouter } from 'next/router'
 import { useToggle } from '@/ToggleContext'
 import Footer from '../footer/footer'
-
+import Link from 'next/link'
 export default function HomePage(){
 
     const router = useRouter()
@@ -21,6 +21,64 @@ export default function HomePage(){
     const [postPhoto, setPostPhoto] = useState('')
     const [loading, setLoading] = useState(true);
     const {isToggled, toggle} = useToggle()
+    
+    const menuRefs = useRef({});
+
+
+    useEffect(() => {
+        allPosts.forEach(post => {
+            menuRefs.current[post._id] = createRef();
+        });
+    }, [allPosts]);
+    
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            let isInsideMenu = false;
+            
+            Object.values(menuRefs.current).forEach(ref => {
+                if (ref.current && ref.current.contains(event.target)) {
+                    isInsideMenu = true;
+                }
+            });
+            
+            if (!isInsideMenu) {
+                // Close all menus if click is outside
+                Object.values(menuRefs.current).forEach(ref => {
+                    if (ref.current) {
+                        ref.current.style.display = 'none';
+                    }
+                });
+            }
+        };
+    
+        // Add the listener
+        document.addEventListener('mousedown', handleOutsideClick);
+        
+        return () => {
+            // Cleanup the listener when component unmounts
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
+    
+
+const toggleMenu = (postId) => {
+    Object.keys(menuRefs.current).forEach((id) => {
+        console.log(menuRefs)
+        if (menuRefs.current[id].current) {
+            if (id === postId) {
+                // toggle the display of the current menu
+                menuRefs.current[id].current.style.display = 
+                    menuRefs.current[id].current.style.display === 'none' ? 'block' : 'none';
+            } else {
+                // ensure all other menus are hidden
+                menuRefs.current[id].current.style.display = 'none';
+            }
+        }
+    });
+}
+
+
 
     useEffect(() => {
         if (id) {
@@ -43,8 +101,11 @@ export default function HomePage(){
 
     useEffect(() => {
         axios.get('/api/posts').then(response => {
-            console.log(response.data)
-            setAllPosts(response.data)
+            setAllPosts(response.data.sort((a, b) => {
+                if(a.createdAt < b.createdAt) return 1;
+                if(a.createdAt > b.createdAt) return -1;
+                return 0;
+            }))
 
             if(profilePic && firstName && lastName) {
                 setLoading(false);
@@ -165,6 +226,44 @@ export default function HomePage(){
         
     }
 
+    async function deletePost(postId) {
+        try {
+            await axios.delete('/api/posts?id=' + postId);
+            
+            // Filter out the deleted post from the state
+            const updatedPosts = allPosts.filter(post => post._id !== postId);
+            setAllPosts(updatedPosts);
+        } catch (error) {
+            console.error("Error deleting the post:", error);
+            // Handle error (for example: show an error message to the user)
+        }
+    }
+
+    function timeDifference(createdDateStr) {
+        const createdDate = new Date(createdDateStr);
+        const currentDate = new Date();
+    
+        const diffMilliseconds = currentDate - createdDate;
+        
+        const diffSeconds = Math.floor(diffMilliseconds / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+    
+        if (diffDays > 0) {
+            return `${diffDays} days ago`;
+        } else if (diffHours > 0) {
+            return `${diffHours} hours ago`;
+        } else if (diffMinutes > 0) {
+            return `${diffMinutes} minutes ago`;
+        } else if (diffSeconds > 0) {
+            return `${diffSeconds} seconds ago`;
+        }else {
+            return 'Just now';
+        }
+    }
+    
+
 
     return(
 
@@ -197,14 +296,38 @@ export default function HomePage(){
                 {allPosts.map((post, index) => 
                 <div className={styles.post} key={post._id} style={isToggled ? {backgroundColor: '#36454F'}: {}}>
                     <div className={styles.user}>
-                        <img height='40' width='40' src={post.creator?.photo || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png'}/>
-                        <p style={isToggled ? {color: 'white'}: {}}>{post.creator?.firstName + " " + post.creator?.lastName}</p>
+                        <div className={styles.userInfo}>
+                                <div className={styles.image}>
+                                    <img height='40' width='40' src={post.creator?.photo || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png'}/>
+                                    
+                                </div>
+                                <div className={styles.userInfoSub}>
+                                    <Link className={styles.username} href={'/profile/' + post.creator._id} style={isToggled ? {color: 'white'} : {}}>{post.creator?.firstName + " " + post.creator?.lastName}</Link>
+                                    <p className={styles.date}>{timeDifference(post.createdAt)}</p>
+                                </div>
+                                
+                        </div>
+                        <div className={styles.options}>
+                                <svg onClick={() => toggleMenu(post._id)} height='30px' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                                </svg>
+                                {post.creator._id === id ?
+                                        <ul ref={menuRefs.current[post._id]} style={{display: 'none'}}>
+                                            <li className="menu-item" onClick={() => deletePost(post._id)}> 
+                                                <p>Delete</p>
+                                            </li>
+                                            <li>
+                                                <p>Edit</p>
+                                            </li>
+                                        </ul>
+                                : ""}
+                        </div>
                     </div>
                     {
                         (post.content.endsWith('.png') || post.content.endsWith('.jpg')) ? (
                             <img src={post.content} alt='Post Image' />
                         ) : (
-                            <div style={isToggled ? {color: 'white'} : {}}>{post.content}</div>
+                            <div style={isToggled ? {color: 'white', marginTop: '-15px'} : {marginTop: '-15px'}}>{post.content}</div>
                         )
                     }
 
