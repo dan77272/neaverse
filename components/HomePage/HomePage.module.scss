@@ -238,30 +238,53 @@
             }
         }
 
-        .commentInput{
-            background-color: rgb(233, 233, 233);
-            outline: none;
-            border: none;
-            height: 30px;
-            border-radius: 5px;
-            font-size: 15px;
-            width: 555px;
-            margin-left: 35px;
-            margin-bottom: 10px;
+        .form{
 
-            @media (max-width: 768px) {
-                max-width: 280px;
+            .comment{
+                .commentInput{
+                    background-color: rgb(233, 233, 233);
+                    outline: none;
+                    border: none;
+                    height: 30px;
+                    border-radius: 5px;
+                    font-size: 15px;
+                    width: 555px;
+                    margin-left: 35px;
+                    margin-bottom: 10px;
+        
+                    @media (max-width: 768px) {
+                        max-width: 280px;
+                    }
+                }
+                .inputButton{
+                    background-color: rgb(106, 163, 228);
+                    border: none;
+                    border-radius: 3px;
+                    color: white;
+                    padding: 8px;
+                    margin-left: 10px;
+                    cursor: pointer;
+                }
             }
+
+    
+            .commentII{
+    
+                .commentSub{
+                    
+                    .commentContent{
+                        font-size: 20px;
+                        @media (max-width: 768px) {
+                            font-size: 10px;
+                        }
+                    }
+    
+                }
+            }
+
+
         }
-        .inputButton{
-            background-color: rgb(106, 163, 228);
-            border: none;
-            border-radius: 3px;
-            color: white;
-            padding: 8px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
+
         }
     }
 }
