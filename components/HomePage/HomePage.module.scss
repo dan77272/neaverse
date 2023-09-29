@@ -21,9 +21,24 @@
             box-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.3);
             padding: 10px;
 
+            input{
+                @media (max-width: 786px){
+                    width: 280px;
+                    margin-bottom: 10px;
+                }
+            }
+
+            .buttons{
+                @media (max-width: 786px){
+                    display: flex;
+                    gap: 50px;
+                }
+            }
+
             @media (max-width: 768px) { // for tablets and below
                 max-width: 300px; // use a percentage to make it flexible
                 flex-direction: column;
+                padding-bottom: 30px;
             }
         }
 
@@ -236,6 +251,13 @@
                 cursor: pointer;
                 font-size: 20px;
             }
+
+            @media (max-width: '786px') {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 80px
+            }
         }
 
         .form{
@@ -254,6 +276,7 @@
         
                     @media (max-width: 768px) {
                         max-width: 280px;
+                        margin: auto;
                     }
                 }
                 .inputButton{
@@ -264,6 +287,10 @@
                     padding: 8px;
                     margin-left: 10px;
                     cursor: pointer;
+                }
+
+                @media (max-width: '786px') {
+                    display: flex;
                 }
             }
 
