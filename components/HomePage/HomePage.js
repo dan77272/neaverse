@@ -196,7 +196,11 @@ const toggleMenu = (postId) => {
 
           const response = await axios.get(`/api/posts?userId=${id}`);
           // Update the comments information for the specific post in the 'allPosts' state
-          setAllPosts(response.data);
+          setAllPosts(response.data.sort((a, b) => {
+            if(a.createdAt < b.createdAt) return 1;
+            if(a.createdAt > b.createdAt) return -1;
+            return 0;
+        }))
       
           // Clear the comment input field after posting
           setCmnt('');

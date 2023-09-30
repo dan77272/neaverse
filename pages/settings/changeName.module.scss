@@ -1,0 +1,50 @@
+.changeName{
+
+    p{
+        display: flex;
+        justify-content: center;
+        color: green;
+        margin-left: 30px;
+        margin-top: 90px;
+        font-size: 20px;
+    }
+
+    .changeNameSub{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        form{
+            display: flex;
+            flex-direction: column;
+            margin-left: 30px;
+            margin-top: 90px;
+            label{
+                margin-bottom: 10px;
+            }
+            input{
+                width: 20rem;
+                margin-bottom: 10px;
+                outline: none;
+                border-radius: 5px;
+                border: 2px solid black;
+                height: 20px;
+                font-size: 20px;
+            }
+
+            button{
+                width: 10rem;
+                background-color: green;
+                color: white;
+                border-radius: 5px;
+                height: 30px;
+                margin-top: 10px;
+                border: none;
+                cursor: pointer;
+                font-size: 15px;
+            }
+        }
+
+    }
+
+}

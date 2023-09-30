@@ -13,5 +13,15 @@ export default async function handle(req, res){
             console.error(error);
             res.status(500).json({ error: "An error occurred while fetching data." });
         }
+    }else if(req.method === 'PUT'){
+        try{
+            const {id, newName, newLastName} = req.body
+            const user = await User.findByIdAndUpdate(id, {firstName: newName, lastName: newLastName})
+            res.status(200).json(user);
+        }catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred." });
+      }
+
     }
 }
