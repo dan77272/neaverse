@@ -199,7 +199,7 @@ const toggleMenu = (postId) => {
             if(a.createdAt < b.createdAt) return 1;
             if(a.createdAt > b.createdAt) return -1;
             return 0;
-        }))
+        }).filter(post => friends.includes(post.creator?._id) || post.creator?._id === id))
       
           // Clear the comment input field after posting
           setCmnt('');
