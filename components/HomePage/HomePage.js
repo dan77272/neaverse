@@ -15,7 +15,7 @@ export default function HomePage(){
     const [allPosts, setAllPosts] = useState([])
     const {id} = useContext(UserContext)
     const [comment, setComment] = useState([])
-    const [cmnt, setCmnt] = useState('')
+    const [cmnt, setCmnt] = useState({});
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [postPhoto, setPostPhoto] = useState('')
@@ -175,7 +175,11 @@ const toggleMenu = (postId) => {
 
       async function handleCommentInput(e, postId, index, type) {
         e.preventDefault();
-        if (cmnt.trim() === '') {
+        
+        // Get the comment related to the postId
+        const currentComment = cmnt[postId] || '';
+      
+        if (currentComment.trim() === '') {
           // Do not submit if the comment content is empty
           return;
         }
@@ -183,28 +187,25 @@ const toggleMenu = (postId) => {
         const data = {
           userId: id,
           type: 'comment',
-          comment: cmnt,
+          comment: currentComment,  // Updated
           firstName: firstName,
           lastName: lastName,
           profilePic: profilePic
         };
       
         try {
-          // Send the comment data to the server to post the comment
           await axios.put('/api/posts?id=' + postId, data);
-
+      
           const response = await axios.get(`/api/posts?userId=${id}`);
-          // Update the comments information for the specific post in the 'allPosts' state
           setAllPosts(response.data.sort((a, b) => {
             if(a.createdAt < b.createdAt) return 1;
             if(a.createdAt > b.createdAt) return -1;
             return 0;
-        }).filter(post => friends.includes(post.creator?._id) || post.creator?._id === id))
-      
+          }).filter(post => friends.includes(post.creator?._id) || post.creator?._id === id))
+          
           // Clear the comment input field after posting
-          setCmnt('');
-      
-          // Optional: Update the 'comment' state to hide the comment input for the current post
+          setCmnt({...cmnt, [postId]: ''});
+          
           const newCommentState = [...comment];
           newCommentState[index] = false;
           setComment(newCommentState);
@@ -212,6 +213,7 @@ const toggleMenu = (postId) => {
           console.error(error);
         }
       }
+          
 
       async function uploadImages(ev){
         const files = ev.target?.files
@@ -358,7 +360,7 @@ const toggleMenu = (postId) => {
                     {comment[index] ?
                     <form className={styles.form} onSubmit={(e) => handleCommentInput(e, post._id, 'comment')}>
                         <div className={styles.comment}>
-                            <input className={styles.commentInput} value={cmnt} onChange={e => setCmnt(e.target.value)} placeholder='Write a comment...'/>
+                        <input className={styles.commentInput} value={cmnt[post._id] || ''} onChange={e => setCmnt({...cmnt, [post._id]: e.target.value})} placeholder='Write a comment...'/>
                             <button className={styles.inputButton} type='submit'>Post Comment</button>
                         </div>
                         {post.comments.map((p) => (
