@@ -105,7 +105,7 @@ const toggleMenu = (postId) => {
                 if(a.createdAt < b.createdAt) return 1;
                 if(a.createdAt > b.createdAt) return -1;
                 return 0;
-            }).filter(post => friends.includes(post.creator._id) || post.creator._id === id))
+            }).filter(post => friends.includes(post.creator?._id) || post.creator?._id === id))
 
             if(profilePic && firstName && lastName) {
                 setLoading(false);

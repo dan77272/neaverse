@@ -103,7 +103,7 @@ const toggleMenu = (postId) => {
                 if(a.createdAt < b.createdAt) return 1;
                 if(a.createdAt > b.createdAt) return -1;
                 return 0;
-            }).filter((post) => post.creator._id === userId))
+            }).filter((post) => post.creator?._id === userId))
         })
     }, [userId])
 
