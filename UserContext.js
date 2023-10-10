@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-
+import Cookies from 'js-cookie'
 export const UserContext = createContext({});
 
 export default function UserContextProvider({ children }) {
@@ -14,9 +14,10 @@ export default function UserContextProvider({ children }) {
   useEffect(() => {
     const fetchUserData = async () => {
       const loggedInUser = localStorage.getItem("loggedInUser");
-      console.log(loggedInUser)
+
       if (loggedInUser) {
         const user = JSON.parse(loggedInUser);
+        Cookies.set('userId', user._id)
         setEmail(user.email);
         setId(user._id);
         setFirstName(user.firstName)

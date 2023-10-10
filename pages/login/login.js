@@ -4,6 +4,9 @@ import axios from 'axios'
 import Link from 'next/link';
 import { UserContext } from '@/UserContext';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie'
+
+
 export default function Login(){
 
     const router = useRouter()
@@ -18,6 +21,7 @@ export default function Login(){
         setLoggedInEmail(email)
         setId(response.data._id)
         localStorage.setItem('loggedInUser', JSON.stringify(response.data));
+        Cookies.set('userId', response.data._id)
         router.push('/')
       }
 

@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { UserContext } from '@/UserContext'
-
+import Cookies from 'js-cookie'
 
 export default function Register(){
 
@@ -48,8 +48,10 @@ export default function Register(){
             const data = {firstName, lastName, email, password}
             const response = await axios.post('/api/register', data)
             setLoggedInEmail(email)
-            setId(data.id)
+            console.log(response.data)
+            setId(response.data._id)
             localStorage.setItem('loggedInUser', JSON.stringify(response.data));
+            Cookies.set('userId', response.data._id)
             router.push('/')
         }
     }

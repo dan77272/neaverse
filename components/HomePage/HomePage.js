@@ -19,6 +19,7 @@ export default function HomePage(){
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [postPhoto, setPostPhoto] = useState('')
+    const [friends, setFriends] = useState([])
     const [loading, setLoading] = useState(true);
     const {isToggled, toggle} = useToggle()
     
@@ -64,7 +65,6 @@ export default function HomePage(){
 
 const toggleMenu = (postId) => {
     Object.keys(menuRefs.current).forEach((id) => {
-        console.log(menuRefs)
         if (menuRefs.current[id].current) {
             if (id === postId) {
                 // toggle the display of the current menu
@@ -89,7 +89,7 @@ const toggleMenu = (postId) => {
                 setPosts(userData.posts || []);
                 setFirstName(userData.firstName);
                 setLastName(userData.lastName);
-
+                setFriends(userData.friends)
                 if(allPosts.length > 0){
                     setLoading(false)
                 }
@@ -105,7 +105,7 @@ const toggleMenu = (postId) => {
                 if(a.createdAt < b.createdAt) return 1;
                 if(a.createdAt > b.createdAt) return -1;
                 return 0;
-            }))
+            }).filter(post => friends.includes(post.creator._id) || post.creator._id === id))
 
             if(profilePic && firstName && lastName) {
                 setLoading(false);
@@ -154,7 +154,6 @@ const toggleMenu = (postId) => {
     
         try {
             const response = await axios.put('/api/posts?id=' + postId, data);
-            console.log(response.data)
             const updatedPost = response.data;
     
             // Update the like information for the specific post in the 'allPosts' state
@@ -278,7 +277,7 @@ const toggleMenu = (postId) => {
             <div>
             <div className={styles.input}>
                 <form onSubmit={(e) => handleSubmit(e)} style={isToggled ? {backgroundColor: '#36454F'}: {}}>
-                    <img height='60' width='60' src={profilePic} alt="Profile Pic"/>
+                    <img className={styles.img} height='60' width='60' src={profilePic} alt="Profile Pic"/>
                     <input type='text' value={post} onChange={e => setPost(e.target.value)} placeholder="What's on your mind?"/>
                     <div className={styles.buttons}>
                         <button className={styles.postButton} type='submit'>Post</button>

@@ -8,6 +8,7 @@ export default function Settings(){
             <Navbar/>
             <div className={styles.settingsOptions}>
                 <Link className={styles.link} href={'/settings/change-name'}>Change Name</Link>
+                <Link className={styles.link} href={'/settings/profile-visibility'}>Profile Visibility</Link>
             </div>
         </div>
     )

@@ -157,6 +157,44 @@
             color: black;
         }
 
+        svg{
+            cursor: pointer;
+        }
+
+        .notificationDropdown {
+            position: absolute;
+            width: 300px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            z-index: 1000; // Ensure it appears above other content
+            top: 60px; // Adjust according to your layout
+            right: 0; // Adjust according to your layout
+        }
+
+        .notificationItem {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            
+            &:last-child {
+                border-bottom: none;
+            }
+
+            .buttons{
+                display: flex;
+                gap: 30px;
+
+                button{
+                    font-size: 15px;
+                    background-color: rgb(106, 163, 228);
+                    color: white;
+                    border-radius: 3px;
+                    
+                }
+            }
+        }
+
         button {
             border: none;
             outline: none;

@@ -7,8 +7,14 @@ import Navbar from '@/components/Navbar/Navbar';
 import { useToggle } from '@/ToggleContext';
 import Footer from '@/components/footer/footer';
 import Link from 'next/link';
+import AddFriendButton from '@/components/AddFriendButton/AddFriendButton';
+import mongoose from 'mongoose';
+import { Notification } from '@/models/Notification';
+import { parse } from 'cookie';
+import { User } from '@/models/User';
 
-export default function Profile(){
+
+export default function Profile({initialRequestStatus}){
 
     const router = useRouter();
     const [cover, setCover] = useState('https://calgary.citynews.ca/static/media/thumbnail-default.8990a232.png')
@@ -20,10 +26,10 @@ export default function Profile(){
     const [comment, setComment] = useState([])
     const [allPosts, setAllPosts] = useState([])
     const [cmnt, setCmnt] = useState('')
+    const [visibility, setVisibility] = useState(null)
     const {id, firstName: fName, lastName: lName, profilePic: pPic} = useContext(UserContext)
-    const {isToggled, toggle} = useToggle()
+    const {isToggled, isPrivate} = useToggle()
     const {id: userId} = router.query
-
 
     const menuRefs = useRef({});
 
@@ -83,6 +89,7 @@ const toggleMenu = (postId) => {
               setFirstName(response.data.firstName || ''),
               setLastName(response.data.lastName || ''),
               setProfilePic(response.data.photo || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png')
+              setVisibility(response.data.visibility)
             })
             .catch(error => {
               console.log(error); // Handle error, e.g., show error message to the user
@@ -92,7 +99,6 @@ const toggleMenu = (postId) => {
 
       useEffect(() => {
         axios.get('/api/posts').then(response => {
-            console.log(response.data)
             setAllPosts(response.data.sort((a, b) => {
                 if(a.createdAt < b.createdAt) return 1;
                 if(a.createdAt > b.createdAt) return -1;
@@ -282,8 +288,11 @@ const toggleMenu = (postId) => {
                         </>}
                     </div>
                         <h2 style={isToggled ? {color: 'white'} : {}}>{firstName + " " + lastName}</h2>
+                        {userId !== id && <AddFriendButton targetUserId={userId} firstName={firstName} lastName={lastName} buttonText={initialRequestStatus.requestButton}/>}
+                        
                 </div>
             </div>
+            {visibility && userId !== id ? <p style={{display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '50px', marginTop: '80px', color: 'gray'}}>Profile is Private</p> :
             <div className={styles.posts}>
                 {allPosts.map((post, index) => 
                 <div className={styles.post} key={post._id} style={isToggled ? {backgroundColor: '#36454F'}: {}}>
@@ -315,7 +324,7 @@ const toggleMenu = (postId) => {
                                 : ""}
                         </div>
                     </div>
-                    {post.content.endsWith(".png") || post.content.endsWith(".jpg") ? <img src={post.content}/> : <div style={isToggled ? {color: 'white'} : {}}>{post.content}</div>}
+                    {post.content.endsWith(".png") || post.content.endsWith(".jpg") ? <img src={post.content}/> : <div style={isToggled ? {color: 'white', marginTop: '-15px'} : {marginTop: '-15px'}}>{post.content}</div>}
                     <p style={{ ...isToggled ? {color: 'white'} : {}, fontSize: '14px', margin: 0}}>{post.likes} Likes</p>
                     <hr style={{color: 'black'}}/>
                     <div className={styles.buttons}>
@@ -355,7 +364,66 @@ const toggleMenu = (postId) => {
                     </form> : ""}
                 </div>)}
             </div>
+            }
             <Footer/>
         </div>
     )
 }
+
+
+export async function getServerSideProps(context) {
+
+    const cookies = parse(context.req.headers.cookie ?? '');
+    const userId = cookies.userId;
+
+    const targetUserId = context.params.id;
+    // Assuming the logged-in user ID is stored in a cookie
+    const loggedInUserId = userId
+
+    async function checkFriendRequestStatus(loggedInUserId, targetUserId) {
+        
+
+        try {
+            if (mongoose.connection.readyState !== 1) {
+                await mongoose.connect(process.env.MONGODB);
+            }
+            console.log('User IDs:', loggedInUserId, targetUserId);
+            const friendRequest = await Notification.findOne({
+                sender: new mongoose.Types.ObjectId(loggedInUserId),
+                recipient: new mongoose.Types.ObjectId(targetUserId),
+                type: 'FRIEND_REQUEST'
+              });
+
+            const loggedInUser = await User.findById(loggedInUserId)
+            const targetUser = await User.findById(targetUserId)
+    
+              if(friendRequest) {
+                console.log(friendRequest.requestButton)
+                return {
+                    status: friendRequest.isRead ? 'read' : 'unread',
+                    requestButton: friendRequest.requestButton,
+                }
+              }else if(loggedInUser.friends.includes(targetUserId) && targetUser.friends.includes(loggedInUserId) ){
+                return {
+                    status: 'no request',
+                    requestButton: 'Friends'
+                }
+              }
+              else{
+                return {
+                    status: 'no request',
+                    requestButton: 'Add Friend'
+                  };
+              }
+        }catch (error) {
+            console.error('Failed to check friend request status:', error);
+            throw error; // Handle the error as appropriate for your use case
+          }
+
+    }
+
+    // Check if a friend request has been sent from loggedInUserId to targetUserId
+    const initialRequestStatus = await checkFriendRequestStatus(loggedInUserId, targetUserId); // You need to implement this function
+    console.log('Initial Request Status:', initialRequestStatus);
+    return { props: { initialRequestStatus } };
+  }
