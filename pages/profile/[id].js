@@ -85,7 +85,7 @@ const toggleMenu = (postId) => {
         if (userId) {
           axios.get(`/api/profile?id=${userId}`)
             .then(response => {
-              setCover(response.data.cover || 'https://calgary.citynews.ca/static/media/thumbnail-default.8990a232.png'),
+              setCover(response.data.cover || 'https://static.vecteezy.com/system/resources/previews/003/423/634/non_2x/grey-gradient-abstract-backgrounds-free-vector.jpg'),
               setFirstName(response.data.firstName || ''),
               setLastName(response.data.lastName || ''),
               setProfilePic(response.data.photo || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png')
