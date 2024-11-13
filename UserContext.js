@@ -10,7 +10,7 @@ export default function UserContextProvider({ children }) {
   const [lastName, setLastName] = useState(null)
   const [profilePic, setProfilePic] = useState(null)
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
-
+  const [friends, setFriends] = useState([])
   useEffect(() => {
     const fetchUserData = async () => {
       const loggedInUser = localStorage.getItem("loggedInUser");
@@ -23,6 +23,7 @@ export default function UserContextProvider({ children }) {
         setFirstName(user.firstName)
         setLastName(user.lastName)
         setProfilePic(user.photo)
+        setFriends(user.friends)
       }
       setIsLoading(false); // Set isLoading to false after values are fetched
     };
@@ -35,7 +36,7 @@ export default function UserContextProvider({ children }) {
   }
 
   return (
-    <UserContext.Provider value={{ email, setEmail, id, setId, firstName, setFirstName, lastName, setLastName, profilePic, setProfilePic }}>
+    <UserContext.Provider value={{ email, setEmail, id, setId, firstName, setFirstName, lastName, setLastName, profilePic, setProfilePic, friends, setFriends }}>
       {children}
     </UserContext.Provider>
   );

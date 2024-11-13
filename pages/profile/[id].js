@@ -13,10 +13,11 @@ import { Notification } from '@/models/Notification';
 import { parse } from 'cookie';
 import { User } from '@/models/User';
 
-
+// Profile component definition
 export default function Profile({initialRequestStatus}){
-
+    // Setting up hooks and context
     const router = useRouter();
+    // Various useState hooks for managing component state
     const [cover, setCover] = useState('https://calgary.citynews.ca/static/media/thumbnail-default.8990a232.png')
     const [profilePic, setProfilePic] = useState('https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png')
     const [firstName, setFirstName] = useState('')
@@ -27,14 +28,17 @@ export default function Profile({initialRequestStatus}){
     const [allPosts, setAllPosts] = useState([])
     const [cmnt, setCmnt] = useState('')
     const [visibility, setVisibility] = useState(null)
-    const {id, firstName: fName, lastName: lName, profilePic: pPic} = useContext(UserContext)
+    const {id, firstName: fName, lastName: lName, profilePic: pPic, friends} = useContext(UserContext)
     const {isToggled, isPrivate} = useToggle()
     const {id: userId} = router.query
 
+     // Refs for managing dropdown menus in posts
     const menuRefs = useRef({});
 
+    // useEffect for handling click outside to close menus
     useEffect(() => {
         const handleOutsideClick = (event) => {
+            // Logic to close all menus if click is outside any menu
             let isInsideMenu = false;
             
             Object.values(menuRefs.current).forEach(ref => {
@@ -62,8 +66,9 @@ export default function Profile({initialRequestStatus}){
         };
     }, []);
     
-
+ // Function to toggle individual post menus
 const toggleMenu = (postId) => {
+    // Logic to display or hide the menu for a specific post
     Object.keys(menuRefs.current).forEach((id) => {
         console.log(menuRefs.current[id])
         if (menuRefs.current[id]) { 
@@ -79,10 +84,11 @@ const toggleMenu = (postId) => {
     });
 }
 
-
+ // useEffect for fetching user profile data
     useEffect(() => {
         
         if (userId) {
+             // Axios call to get user data and setting state
           axios.get(`/api/profile?id=${userId}`)
             .then(response => {
               setCover(response.data.cover || 'https://static.vecteezy.com/system/resources/previews/003/423/634/non_2x/grey-gradient-abstract-backgrounds-free-vector.jpg'),
@@ -97,7 +103,9 @@ const toggleMenu = (postId) => {
         }
       }, [userId]);
 
+    // useEffect for fetching user's posts
       useEffect(() => {
+        // Axios call to get posts data and setting state
         axios.get('/api/posts').then(response => {
             setAllPosts(response.data.sort((a, b) => {
                 if(a.createdAt < b.createdAt) return 1;
@@ -107,8 +115,9 @@ const toggleMenu = (postId) => {
         })
     }, [userId])
 
-
+    // useEffect for dark/light mode toggle
     useEffect(() => {
+        // Logic to change background color based on toggle state
         if (isToggled) {
           document.body.style.backgroundColor = '#28282B';
         } else {
@@ -116,7 +125,9 @@ const toggleMenu = (postId) => {
         }
       }, [isToggled]);
 
+      // Function to handle image uploads
     async function uploadImages(ev, buttonPressed){
+         // Logic for handling image uploads (cover/profile)
         const files = ev.target?.files
         if(files.length > 0){
             const data = new FormData()
@@ -137,6 +148,7 @@ const toggleMenu = (postId) => {
         
     }
 
+    // Functions to save cover and profile pictures
     async function saveCover(e){
         e.preventDefault()
         const data = {cover};
@@ -153,7 +165,9 @@ const toggleMenu = (postId) => {
         setIsProfileUploaded(false)
     }
 
+     // Function to handle liking a post
     async function handleLikeClick(postId, index, type) {
+        // Logic for handling like action on a post
         const data = { userId: id, type };
     
         try {
@@ -172,13 +186,16 @@ const toggleMenu = (postId) => {
         }
     }
 
+    // Function to toggle comment section visibility
       function handleCommentClick(index){
         const newComment = [...comment]
         newComment[index] = !newComment[index]
         setComment(newComment)
       }
 
+      // Function to handle posting a comment
       async function handleCommentInput(e, postId, index, type){
+         // Logic for posting a comment
         e.preventDefault();
         if (cmnt.trim() === '') {
           // Do not submit if the comment content is empty
@@ -209,6 +226,7 @@ const toggleMenu = (postId) => {
       }
 
 
+      // Function to delete a post
       async function deletePost(postId) {
         try {
             await axios.delete('/api/posts?id=' + postId);
@@ -222,6 +240,7 @@ const toggleMenu = (postId) => {
         }
     }
 
+     // Function to calculate time difference for post creation
     function timeDifference(createdDateStr) {
         const createdDate = new Date(createdDateStr);
         const currentDate = new Date();
@@ -292,7 +311,7 @@ const toggleMenu = (postId) => {
                         
                 </div>
             </div>
-            {visibility && userId !== id ? <p style={{display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '50px', marginTop: '80px', color: 'gray'}}>Profile is Private</p> :
+            {visibility && userId !== id && !friends.includes(userId) ? <p style={{display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '50px', marginTop: '80px', color: 'gray'}}>Profile is Private</p> :
             <div className={styles.posts}>
                 {allPosts.map((post, index) => 
                 <div className={styles.post} key={post._id} style={isToggled ? {backgroundColor: '#36454F'}: {}}>
@@ -370,14 +389,13 @@ const toggleMenu = (postId) => {
     )
 }
 
-
+// getServerSideProps function for initial data fetching
 export async function getServerSideProps(context) {
 
     const cookies = parse(context.req.headers.cookie ?? '');
     const userId = cookies.userId;
 
     const targetUserId = context.params.id;
-    // Assuming the logged-in user ID is stored in a cookie
     const loggedInUserId = userId
 
     async function checkFriendRequestStatus(loggedInUserId, targetUserId) {
@@ -387,7 +405,6 @@ export async function getServerSideProps(context) {
             if (mongoose.connection.readyState !== 1) {
                 await mongoose.connect(process.env.MONGODB);
             }
-            console.log('User IDs:', loggedInUserId, targetUserId);
             const friendRequest = await Notification.findOne({
                 sender: new mongoose.Types.ObjectId(loggedInUserId),
                 recipient: new mongoose.Types.ObjectId(targetUserId),
@@ -398,7 +415,6 @@ export async function getServerSideProps(context) {
             const targetUser = await User.findById(targetUserId)
     
               if(friendRequest) {
-                console.log(friendRequest.requestButton)
                 return {
                     status: friendRequest.isRead ? 'read' : 'unread',
                     requestButton: friendRequest.requestButton,
@@ -424,6 +440,5 @@ export async function getServerSideProps(context) {
 
     // Check if a friend request has been sent from loggedInUserId to targetUserId
     const initialRequestStatus = await checkFriendRequestStatus(loggedInUserId, targetUserId); // You need to implement this function
-    console.log('Initial Request Status:', initialRequestStatus);
     return { props: { initialRequestStatus } };
   }

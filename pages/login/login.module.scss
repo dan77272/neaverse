@@ -1,80 +1,136 @@
+/* login.module.scss */
 
-.register{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    justify-content: center;
-    margin-top: 300px;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-    @media (max-width: 786px) {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 50px;
+.register {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-color);
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-color);
+
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    max-width: 1200px;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
     }
 
-    .title{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin-left: 40px;
+    .title {
+      flex: 1;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
-        @media (max-width: 786px) {
-            margin: 50px;
-        }
-        h1{
-            font-size: 50px;
-            margin: 0px;
-            color: rgb(31, 127, 206);
-        }
-        p{
-            font-size: 20px;
-            line-height: 35px;
+      h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
 
-            @media (max-width: 786px) {
-                display: none;
-            }
-        }
+      p {
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 768px) {
+        padding: 40px 20px;
+        text-align: center;
+      }
     }
 
-    .form{
+    .form {
+      flex: 1;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      @media (max-width: 768px) {
+        padding: 40px 20px;
+      }
+
+      form {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        form{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            input, button{
-                width: 400px;
-                height: 50px;
-                box-sizing: border-box;
-                border-radius: 5px;
-                border: 1px solid grey;
-                font-size: 25px;
-            }
-    
-            button{
-                background-color: rgb(31, 127, 206);
-                border-color: transparent;
-                color: white;
-                cursor: pointer;
-            }
-        }
-        .newAccount{
-            margin-top: 50px;
-            background-color: rgb(29, 173, 48);
-            padding: 10px 70px;
+        gap: 20px;
+
+        .formGroup {
+          display: flex;
+          flex-direction: column;
+
+          label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 500;
+          }
+
+          input {
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 1px solid var(--input-border);
             border-radius: 5px;
-            text-decoration: none;
-            font-size: 25px;
-            color: white;
+            background-color: var(--input-background);
+            color: var(--text-color);
+            transition: border-color 0.3s;
+
+            &:focus {
+              border-color: var(--primary-color);
+              outline: none;
+            }
+          }
         }
+
+        button {
+          padding: 14px 16px;
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--button-text-color);
+          background-color: var(--button-background);
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: var(--secondary-color);
+          }
+        }
+      }
+
+      .newAccount {
+        margin-top: 30px;
+        text-align: center;
+
+        a {
+          font-size: 16px;
+          color: var(--link-color);
+          text-decoration: none;
+          font-weight: 500;
+          transition: color 0.3s;
+
+          &:hover {
+            color: var(--link-hover-color);
+          }
+        }
+      }
     }
-
-
+  }
 }

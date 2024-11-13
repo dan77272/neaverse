@@ -1,249 +1,281 @@
-.userSuggestion {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #fff;
-    border-bottom: 1px solid #e0e0e0;
-    transition: background-color 0.2s ease;
-    cursor: pointer;
-    &:hover {
-        background-color: #f0f0f0;
-    }
-    a {
-        text-decoration: none;
-        color: #333;
-    }
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-.profilePicture {
-    margin-right: 10px;
-    img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: 1px solid black;
-        object-fit: cover;
-    }
-}
-
-.userName {
-    flex: 1;
-}
 
 .navbar {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    margin: 20px 30px;
-    font-size: 20px;
-    
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+  
+    &.dark {
+      background-color: var(--background-color-dark);
+      color: var(--text-color-dark);
+    }
+  
     .logo {
-        font-size: 30px;
-        .home {
+      .home {
+        font-size: 28px;
+        font-weight: 700;
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+  
+    .searchContainer {
+      flex: 1;
+      position: relative;
+      margin: 0 20px;
+  
+      .input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s;
+  
+        &:focus {
+          border-color: var(--primary-color);
+        }
+      }
+  
+      .suggestionList {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--background-color);
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 10;
+  
+        .suggestionItem {
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          transition: background-color 0.2s;
+  
+          &:hover {
+            background-color: #f0f0f0;
+          }
+  
+          .userSuggestion {
+            display: flex;
+            align-items: center;
             text-decoration: none;
-            color: black;
-        }
-    }
-
-    .mid {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        .input {
-            width: 50%; 
-            height: 30px;
-            border-radius: 7px;
-            outline: none;
-            border: 1px solid black;
-            font-size: 20px;
-            transform: translateX(15%);
-
-            @media (max-width: 768px) {
-                transform: translateX(0%);
-                width: 200px;
-            }
-        }
-
-        .suggestionList {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 200px;
-            overflow-y: auto;
-            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 49%;
-            min-width: 200px;
-            z-index: 2;
-            transform: translateX(68%);
-            .suggestionItem {
-                padding: 10px;
-                background-color: #fff;
-                border-bottom: 1px solid #e0e0e0;
-                transition: background-color 0.2s ease;
-                cursor: pointer;
-
-                &:hover {
-                    background-color: #f0f0f0;
-                }
-                
-                a {
-                    text-decoration: none;
-                    color: #333;
-                }
-            }
-
-            @media (max-width: 768px) {
-                transform: translateX(0%);
-                width: 200px;
-            }
-        }
-    }
-
-    .right {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-
-        .toggleCheckbox {
-            display: none; // Hide the checkbox
-        
-            &:checked + .toggleLabel::before {
-                transform: translateX(26px); // Adjust this value as necessary for the right position
-            }
-        }
-
-        .toggleLabel {
-            width: 60px;
-            height: 30px;
-            background-color: #ccc;
-            position: relative;
-            border-radius: 34px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        
-            &::before {
-                content: '';
-                position: absolute;
-                left: 4px;
-                top: 4px;
-                width: 22px;
-                height: 22px;
+            color: inherit;
+  
+            .profilePicture {
+              margin-right: 10px;
+  
+              img {
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
-                background-color: white;
-                transition: all 0.3s;
+                object-fit: cover;
+              }
             }
-        
-            &:hover {
-                background-color: #ddd;
+  
+            .userName {
+              font-size: 16px;
             }
+          }
         }
-
-        .toggleCheckbox:checked + .toggleLabel {
-            background-color: #4CAF50;
-        }
-        
-        .link {
-            font-size: 20px;
-            text-decoration: none;
-            color: black;
-        }
-
-        svg{
-            cursor: pointer;
-        }
-
-        .notificationDropdown {
-            position: absolute;
-            width: 300px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px;
-            z-index: 1000; // Ensure it appears above other content
-            top: 60px; // Adjust according to your layout
-            right: 0; // Adjust according to your layout
-        }
-
-        .notificationItem {
-            padding: 5px;
-            border-bottom: 1px solid #eee;
-            
-            &:last-child {
-                border-bottom: none;
-            }
-
-            .buttons{
-                display: flex;
-                gap: 30px;
-
-                button{
-                    font-size: 15px;
-                    background-color: rgb(106, 163, 228);
-                    color: white;
-                    border-radius: 3px;
-                    
-                }
-            }
-        }
-
-        button {
-            border: none;
-            outline: none;
-            background-color: rgb(236, 235, 235);
-            cursor: pointer;
-            padding: 10px;
-            font-size: 20px;
-        }
+      }
     }
-
-    .hamburger {
-        display: none;
-        font-size: 24px;
+  
+    .right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+  
+      .toggleButton {
+        background: none;
+        border: none;
         cursor: pointer;
-    }
-}
+        color: inherit;
+        font-size: 20px;
+        padding-left: 20px;
 
-@media (max-width: 768px) {
+        &:hover {
+            color: var(--primary-color);
+          }
+      }
+  
+      .link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        font-size: 18px;
+        gap: 5px;
+  
+        &:hover {
+          color: var(--primary-color);
+        }
+      }
+  
+      .notificationIconContainer {
+        position: relative;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--primary-color);
+          }
+  
+        .notificationIcon {
+          font-size: 20px;
+        }
+  
+        .notificationCount {
+          position: absolute;
+          top: -5px;
+          right: -10px;
+          background-color: var(--accent-color);
+          color: #fff;
+          border-radius: 50%;
+          padding: 2px 6px;
+          font-size: 12px;
+        }
+  
+        .notificationDropdown {
+          position: absolute;
+          right: 0;
+          top: 30px;
+          width: 300px;
+          background-color: var(--background-color);
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          z-index: 100;
+  
+          .notificationItem {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+  
+            &:last-child {
+              border-bottom: none;
+            }
+  
+            p {
+              margin: 0 0 10px 0;
+              font-size: 14px;
+            }
+  
+            .buttons {
+              display: flex;
+              gap: 10px;
+  
+              button {
+                padding: 6px 12px;
+                font-size: 14px;
+                background-color: var(--primary-color);
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+  
+                &:hover {
+                  background-color: var(--secondary-color);
+                }
+              }
+            }
+          }
+  
+          .noNotifications {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+          }
+        }
+      }
+  
+      .signOutButton {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: inherit;
+        font-size: 18px;
+        gap: 5px;
+  
+        &:hover {
+          color: var(--primary-color);
+        }
+      }
+  
+      .hamburger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: inherit;
+        font-size: 24px;
+      }
+    }
+  
+    .mobileMenu {
+      position: absolute;
+      top: 60px;
+      right: 10px;
+      background-color: var(--background-color);
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 200px;
+      z-index: 100;
+  
+      .mobileLink,
+      .mobileSignOutButton {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: inherit;
+        font-size: 16px;
+        border-bottom: 1px solid #eee;
+  
+        &:hover {
+          background-color: #f0f0f0;
+        }
+      }
+  
+      .mobileSignOutButton {
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
     .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-        margin: 10px;
-        
-        .logo {
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-        
-        .mid {
-            margin-left: 0;
-
-            .input{
-                margin-left: 0px;
-            }
-        }
-
-        .right {
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-            display: none;
-
-            &.open {
-                display: flex;
-            }
-        }
-
+      .searchContainer {
+        display: none;
+      }
+  
+      .right {
         .hamburger {
-            display: block;
+          display: block;
         }
+  
+        .link,
+        .signOutButton,
+        .toggleButton,
+        .notificationIconContainer {
+          display: none;
+        }
+      }
     }
-}
+  }
